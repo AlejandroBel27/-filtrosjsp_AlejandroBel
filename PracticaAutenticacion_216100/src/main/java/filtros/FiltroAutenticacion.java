@@ -4,6 +4,8 @@
  */
 package filtros;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -22,7 +24,8 @@ import javax.servlet.ServletResponse;
 public class FiltroAutenticacion implements Filter {
     
     private static final boolean debug = true;
-
+    private static final String[] urlPublicas = {"home.jsp","index.jsp"}; 
+    
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
@@ -84,6 +87,33 @@ public class FiltroAutenticacion implements Filter {
          */
     }
 
+    // verificia que haya una sesion activa y que el usuario se encuentre autentificado.
+    private boolean estalogueado(HttpServletRequest httpRequest){
+        HttpSession sesion = httpRequest.getSession(false);
+        boolean logueado = (sesion != null && sesion.getAttribute("usuario")!= null);
+        return logueado;
+    }
+    
+    // verifica que la ruta a la que se quiere acceder es privada
+    private boolean esURLPrivada (String ruta){
+        for(String url : urlPublicas){
+            if(ruta.startsWith("/"+url)){
+                return false;
+            }
+            
+        }
+        return true;
+    }
+    
+    //obtiene la ruta a la que desea acceder
+    private String getRutaSolicitada(HttpServletRequest httpRequest){
+        String uriSolicitada = httpRequest.getRequestURI();
+        String ruta = uriSolicitada.substring(httpRequest.getContextPath().length());
+        return ruta;
+    }
+    
+    
+    
     /**
      *
      * @param request The servlet request we are processing

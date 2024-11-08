@@ -9,9 +9,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>mi-Perfil</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>mi perfil</h1>
     </body>
 </html>
